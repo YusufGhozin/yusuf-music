@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101014">
+  <meta name="description" content="Pemutar musik pribadi Yusuf Music.">
+  <title>Yusuf Music — Personal Music Player</title>
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#home" aria-label="Yusuf Music beranda">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>YUSUF<span class="brand-light">MUSIC</span></span>
+      </a>
+
+      <div class="side-label">MENU</div>
+      <nav class="side-nav" aria-label="Navigasi utama">
+        <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span>Beranda</button>
+        <button class="nav-item" data-view="library"><span class="nav-icon">▤</span>Koleksi musik</button>
+        <button class="nav-item" data-view="favorites"><span class="nav-icon">♡</span>Favorit</button>
+        <button class="nav-item" data-view="playlists"><span class="nav-icon">▣</span>Playlist</button>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+      <div class="playlist-heading">
+        <span class="side-label">PLAYLIST SAYA</span>
+        <button class="icon-button small" id="sidebarCreatePlaylist" title="Buat playlist" aria-label="Buat playlist">＋</button>
+      </div>
+      <div id="sidebarPlaylists" class="sidebar-playlists">
+        <p class="muted small-text">Belum ada playlist</p>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="storage-card">
+          <div class="storage-icon">♫</div>
+          <div>
+            <strong>Musik milikmu</strong>
+            <p>Disimpan di perangkat ini</p>
+          </div>
+        </div>
+        <p class="sidebar-footnote">PERSONAL MUSIC SPACE · 2026</p>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="history-controls" aria-hidden="true"><span>‹</span><span>›</span></div>
+        <label class="search-box">
+          <span>⌕</span>
+          <input type="search" id="searchInput" placeholder="Cari lagu atau artis..." autocomplete="off">
+        </label>
+        <div class="top-actions">
+          <button id="installButton" class="button button-quiet hidden">Pasang aplikasi</button>
+          <button id="importButton" class="button button-primary"><span>＋</span> Tambah lagu</button>
+          <input id="audioFileInput" type="file" accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.flac" multiple hidden>
+        </div>
+      </header>
+
+      <div class="page-content" id="pageContent">
+        <section class="hero-panel">
+          <div class="hero-glow"></div>
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="live-dot"></span> RUANG MUSIK PRIBADIMU</div>
+            <h1>Semua lagu favorit,<br><em>dalam satu ruang.</em></h1>
+            <p>Koleksi musikmu. Aturanmu. Dengarkan kapan saja.</p>
+            <div class="hero-actions">
+              <button class="button button-accent" id="heroImportButton"><span>＋</span> Tambahkan musik</button>
+              <button class="button button-outline" id="heroLibraryButton">Lihat koleksi <span>↗</span></button>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="vinyl vinyl-back"></div>
+            <div class="vinyl vinyl-front"><div class="vinyl-center">YM</div></div>
+            <div class="equalizer"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="hero-index">01 <span>/ YOUR SOUND</span></div>
+        </section>
+
+        <section class="content-section" id="mainSection">
+          <div class="section-heading">
+            <div><div class="eyebrow muted-eyebrow">MULAI DARI SINI</div><h2>Baru ditambahkan</h2></div>
+            <button class="text-button" id="seeAllButton">Lihat semua <span>→</span></button>
+          </div>
+          <div id="homeTrackList" class="track-list"></div>
+        </section>
+
+        <section class="content-section welcome-section" id="welcomeSection">
+          <div class="section-heading"><div><div class="eyebrow muted-eyebrow">YOUR LIBRARY</div><h2>Bangun koleksimu</h2></div></div>
+          <div class="empty-feature">
+            <div class="empty-disc"><span>♫</span></div>
+            <div><h3>Belum ada lagu di sini</h3><p>Tambahkan file musik dari perangkatmu untuk mulai membangun perpustakaan musik pribadi.</p></div>
+            <button class="button button-primary" id="emptyImportButton">Pilih file musik</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Navigasi mobile">
+    <button class="mobile-nav-item active" data-view="home"><span>⌂</span>Beranda</button>
+    <button class="mobile-nav-item" data-view="library"><span>▤</span>Koleksi</button>
+    <button class="mobile-nav-item" data-view="favorites"><span>♡</span>Favorit</button>
+    <button class="mobile-nav-item" data-view="playlists"><span>▣</span>Playlist</button>
+  </nav>
+
+  <footer class="player-bar" id="playerBar">
+    <div class="now-playing">
+      <div class="player-cover cover-placeholder" id="playerCover"><span>♫</span></div>
+      <div class="now-playing-copy">
+        <div class="now-playing-title" id="playerTitle">Pilih lagu untuk diputar</div>
+        <div class="now-playing-artist" id="playerArtist">Koleksi musikmu akan muncul di sini</div>
+      </div>
+      <button class="icon-button favorite-player" id="playerFavorite" title="Tambah ke favorit" aria-label="Tambah ke favorit" disabled>♡</button>
+    </div>
+
+    <div class="player-center">
+      <div class="player-controls">
+        <button class="control-button secondary" id="shuffleButton" title="Acak" aria-label="Acak">⤨</button>
+        <button class="control-button" id="previousButton" title="Lagu sebelumnya" aria-label="Lagu sebelumnya">Ⅱ◀</button>
+        <button class="play-button" id="playPauseButton" title="Putar" aria-label="Putar">▶</button>
+        <button class="control-button" id="nextButton" title="Lagu berikutnya" aria-label="Lagu berikutnya">▶Ⅱ</button>
+        <button class="control-button secondary" id="repeatButton" title="Ulangi: mati" aria-label="Ulangi">↻</button>
+      </div>
+      <div class="progress-row">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressBar" min="0" max="1000" value="0" aria-label="Posisi lagu">
+        <span id="durationTime">0:00</span>
+      </div>
+    </div>
+
+    <div class="player-extra">
+      <span class="volume-icon">◖</span>
+      <input type="range" id="volumeBar" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+    </div>
+    <audio id="audioElement" preload="metadata"></audio>
+  </footer>
+
+  <dialog id="playlistDialog" class="app-dialog">
+    <form method="dialog" id="playlistForm">
+      <div class="dialog-top"><div><div class="eyebrow muted-eyebrow">NEW COLLECTION</div><h2>Buat playlist</h2></div><button class="icon-button" value="cancel" aria-label="Tutup">×</button></div>
+      <p class="dialog-description">Kumpulkan lagu sesuai suasana atau seleramu.</p>
+      <label class="field-label" for="playlistNameInput">Nama playlist</label>
+      <input class="text-input" id="playlistNameInput" maxlength="40" placeholder="Contoh: Late Night Drive" required>
+      <div class="dialog-actions"><button class="button button-quiet" value="cancel">Batal</button><button class="button button-primary" id="savePlaylistButton" value="default">Buat playlist</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="addToPlaylistDialog" class="app-dialog">
+    <form method="dialog" id="addToPlaylistForm">
+      <div class="dialog-top"><div><div class="eyebrow muted-eyebrow">SAVE TRACK</div><h2>Tambahkan ke playlist</h2></div><button class="icon-button" value="cancel" aria-label="Tutup">×</button></div>
+      <p class="dialog-description" id="addToPlaylistTrackName">Pilih playlist tujuan.</p>
+      <label class="field-label" for="playlistSelect">Playlist</label>
+      <select class="text-input" id="playlistSelect"></select>
+      <div class="dialog-actions"><button class="button button-quiet" value="cancel">Batal</button><button class="button button-primary" id="confirmAddToPlaylist" value="default">Tambahkan</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
